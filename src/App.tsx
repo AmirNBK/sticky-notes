@@ -39,7 +39,7 @@ function App() {
 
   const addNote = () => {
     const newNote: NoteData = {
-      id: Date.now(), // Use a unique ID, e.g., timestamp
+      id: Date.now(),
       content: '',
       bgColor: getRandomColor(),
       rotation: getRandomRotation(),
