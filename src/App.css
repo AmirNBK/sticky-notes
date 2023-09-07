@@ -6,9 +6,10 @@
 }
 
 body {
-  background-color: black;
+  background-color: #3C3C3C;
   font-family: monospace;
   cursor: cell;
+  overflow: hidden;
 }
 
 .card {
