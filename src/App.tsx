@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Note from '../components/Note/Note';
-import { useSpring, animated } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
 
 interface NoteData {
+  id: number;
   content: string;
   bgColor: string;
   rotation: number;
@@ -20,7 +19,19 @@ function App() {
     return bgColors[randomIndex];
   };
 
+  function getRandomRotation(): number {
+    return Math.floor(Math.random() * 9) - 4;
+  }
+
   const [notes, setNotes] = useState<NoteData[]>(storedNotes);
+
+  const handleContentChange = (id: number, newContent: string) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, content: newContent } : note
+      )
+    );
+  };
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -28,9 +39,10 @@ function App() {
 
   const addNote = () => {
     const newNote: NoteData = {
-      content: 'New Note',
+      id: Date.now(), // Use a unique ID, e.g., timestamp
+      content: '',
       bgColor: getRandomColor(),
-      rotation: 4,
+      rotation: getRandomRotation(),
     };
     setNotes((prevNotes) => [...prevNotes, newNote]);
   };
@@ -53,16 +65,16 @@ function App() {
   return (
     <div>
       <div className="notes-container">
-        {notes.map((item, index) => {
-          return (
-            <Note
-              key={index}
-              content={item.content}
-              bgColor={item.bgColor}
-              rotation={item.rotation}
-            />
-          );
-        })}
+        {notes.map((item) => (
+          <Note
+            key={item.id}
+            id={item.id}
+            content={item.content}
+            bgColor={item.bgColor}
+            rotation={item.rotation}
+            onChange={handleContentChange}
+          />
+        ))}
       </div>
     </div>
   );
