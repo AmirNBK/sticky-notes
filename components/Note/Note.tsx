@@ -52,7 +52,7 @@ const Note = (props: {
                     padding: '10px 20px',
                     cursor: 'grab',
                     transition: 'all 0.5s',
-                    transform: `${focused ? 'rotate(0deg)' : `rotate(${props.rotation}deg)`}`,
+                    transform: `${focused ? 'rotate(0deg) ' : `rotate(${props.rotation}deg)`} scale(${focused ? '1.1' : '1'})`,
                     position: 'absolute',
                 }}
             />
