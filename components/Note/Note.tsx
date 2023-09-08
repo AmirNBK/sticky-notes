@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
-import { useSpring, animated } from '@react-spring/web'
-import { useDrag } from '@use-gesture/react'
-import './Note.css'
+import { useEffect, useState } from 'react';
+import { useSpring, animated } from '@react-spring/web';
+import { useDrag } from '@use-gesture/react';
 
 const Note = (props: {
     updateNotePosition: (id: number, position: { x: number; y: number }) => void;
@@ -10,18 +9,18 @@ const Note = (props: {
     bgColor: string;
     rotation: number;
     onChange: (id: number, content: string) => void;
-    mouseCoords: any
 }) => {
-    const [focused, setFocused] = useState<boolean>(false)
+    const [focused, setFocused] = useState<boolean>(false);
 
-    const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
+    const initialPosition = JSON.parse(localStorage.getItem(`note_${props.id}`) || '{"x": 0, "y": 0}');
+    const [{ x, y }, api] = useSpring(() => ({ x: initialPosition.x, y: initialPosition.y }));
 
-    const bind = useDrag(({ offset: [ox, oy] }) => api.start({ x: ox, y: oy, immediate: false }), {
-    })
+    const bind = useDrag(({ offset: [ox, oy] }) => api.start({ x: ox, y: oy, immediate: false }), {});
 
     useEffect(() => {
-        props.updateNotePosition(props.id, { x: x.animation.to, y: y.animation.to });
-    }, [x.animation.to]);
+        props.updateNotePosition(props.id, { x: x.get(), y: y.get() });
+        localStorage.setItem(`note_${props.id}`, JSON.stringify({ x: x.get(), y: y.get() }));
+    }, [x.get(), y]);
 
     const handleNoteClick = () => {
         setFocused(true);
@@ -32,7 +31,7 @@ const Note = (props: {
     };
 
     return (
-        <animated.div {...bind()} style={{ x, y, touchAction: 'none' }} >
+        <animated.div {...bind()} style={{ x, y, touchAction: 'none' }}>
             <textarea
                 onClick={handleNoteClick}
                 onBlur={handleBlur}
@@ -52,13 +51,13 @@ const Note = (props: {
                     padding: '10px 20px',
                     cursor: 'grab',
                     transition: 'all 0.5s',
-                    transform: `${focused ? 'rotate(0deg) ' : `rotate(${props.rotation}deg)`} scale(${focused ? '1.1' : '1'})`,
+                    transform: `${focused ? 'rotate(0deg) ' : `rotate(${props.rotation}deg)`} scale(${focused ? '1.1' : '1'
+                        })`,
                     position: 'absolute',
                 }}
             />
         </animated.div>
     );
 };
-
 
 export default Note;
