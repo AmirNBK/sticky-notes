@@ -26,8 +26,6 @@ function App() {
   }
 
   const updateNotePosition = (id: number, position: { x: number; y: number }) => {
-    console.log(position);
-
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.id === id ? { ...note, position } : note

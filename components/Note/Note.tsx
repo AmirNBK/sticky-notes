@@ -10,6 +10,24 @@ const Note = (props: {
     rotation: number;
     onChange: (id: number, content: string) => void;
 }) => {
+    const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const handleWindowMouseMove = (event: { clientX: any; clientY: any; }) => {
+            setMouseCoords({
+                x: event.clientX,
+                y: event.clientY,
+            });
+        };
+        window.addEventListener('mousemove', handleWindowMouseMove);
+
+        return () => {
+            window.removeEventListener(
+                'mousemove',
+                handleWindowMouseMove,
+            );
+        };
+    }, []);
     const [focused, setFocused] = useState<boolean>(false);
 
     const initialPosition = JSON.parse(localStorage.getItem(`note_${props.id}`) || '{"x": 0, "y": 0}');
@@ -20,7 +38,7 @@ const Note = (props: {
     useEffect(() => {
         props.updateNotePosition(props.id, { x: x.get(), y: y.get() });
         localStorage.setItem(`note_${props.id}`, JSON.stringify({ x: x.get(), y: y.get() }));
-    }, [x.get(), y]);
+    }, [x.get(), y.get() , mouseCoords]);
 
     const handleNoteClick = () => {
         setFocused(true);
