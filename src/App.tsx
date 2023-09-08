@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Note from '../components/Note/Note';
-
+import { getRandomColor, getRandomRotation } from '../functions/functions';
 interface NoteData {
   id: number;
   content: string;
@@ -11,30 +11,15 @@ interface NoteData {
 
 function App() {
   const storedNotes: NoteData[] = JSON.parse(localStorage.getItem('notes') || '[]');
+  const [notes, setNotes] = useState<NoteData[]>(storedNotes);
   
-  const bgColors = ['#d070af', '#2fb4ab', '#d9a75f'];
-
-  const getRandomColor = () => {
-    const randomIndex = Math.floor(Math.random() * bgColors.length);
-    return bgColors[randomIndex];
-  };
-
-  function getRandomRotation(): number {
-    return Math.floor(Math.random() * 9) - 4;
-  }
-
   const updateNotePosition = (id: number, position: { x: number; y: number }) => {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.id === id ? { ...note, position } : note
       )
     );
-
-    // console.log(notes);
-
   };
-
-  const [notes, setNotes] = useState<NoteData[]>(storedNotes);
 
   const handleContentChange = (id: number, newContent: string) => {
     setNotes((prevNotes) =>
