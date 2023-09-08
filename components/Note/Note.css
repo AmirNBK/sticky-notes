@@ -1,0 +1,3 @@
+.NoteCard:focus {
+    transform: rotate(0deg);
+}

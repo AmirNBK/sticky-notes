@@ -12,6 +12,8 @@ interface NoteData {
 function App() {
   const storedNotes: NoteData[] = JSON.parse(localStorage.getItem('notes') || '[]');
 
+
+
   const bgColors = ['#d070af', '#2fb4ab', '#d9a75f'];
 
   const getRandomColor = () => {
@@ -22,6 +24,17 @@ function App() {
   function getRandomRotation(): number {
     return Math.floor(Math.random() * 9) - 4;
   }
+
+  const updateNotePosition = (id: number, position: { x: number; y: number }) => {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, position } : note
+      )
+    );
+
+    console.log(notes);
+    
+  };
 
   const [notes, setNotes] = useState<NoteData[]>(storedNotes);
 
@@ -73,6 +86,7 @@ function App() {
             bgColor={item.bgColor}
             rotation={item.rotation}
             onChange={handleContentChange}
+            updateNotePosition={updateNotePosition}
           />
         ))}
       </div>
