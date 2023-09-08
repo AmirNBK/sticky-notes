@@ -11,9 +11,7 @@ interface NoteData {
 
 function App() {
   const storedNotes: NoteData[] = JSON.parse(localStorage.getItem('notes') || '[]');
-
-
-
+  
   const bgColors = ['#d070af', '#2fb4ab', '#d9a75f'];
 
   const getRandomColor = () => {
